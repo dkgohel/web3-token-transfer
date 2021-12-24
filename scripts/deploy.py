@@ -40,7 +40,7 @@ abi = json.loads(compiled_sol["contracts"]["Token.sol"]["Token"]["metadata"])["o
 
 w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
 chain_id = 1337
-my_address = "0x8EEB26040559413929a32f7F98b04b6d5C795573"
+my_address = os.getenv("MY_ADDRESS")
 private_key = os.getenv("PRIVATE_KEY")
 print(private_key)
 Token = w3.eth.contract(abi=abi, bytecode=bytecode)
@@ -74,7 +74,7 @@ howManytokens = 10
 print(f"\nTransferring {howManytokens} tokens...")
 
 tokenTransfertxn = token.functions.transfer(
-    "0xA160e1cD3d43CDEfaD5584dD5E71CC2859d2a0Dc", howManytokens
+    os.getenv("TO"), howManytokens
 ).buildTransaction(
     {
         "chainId": chain_id,
@@ -91,4 +91,4 @@ txtokenTransferHash = w3.eth.send_raw_transaction(signedtokenTransaferTxn.rawTra
 
 print("Transffered!")
 tokenTxnReceipt = w3.eth.wait_for_transaction_receipt(txtokenTransferHash)
-print(token.functions.balanceOf("0xA160e1cD3d43CDEfaD5584dD5E71CC2859d2a0Dc").call())
+print(token.functions.balanceOf(os.getenv("TO")).call())
